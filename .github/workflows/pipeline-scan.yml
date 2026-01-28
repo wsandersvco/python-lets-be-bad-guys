@@ -83,7 +83,8 @@ jobs:
         # create code scanning alerts
         uses: veracode/veracode-pipeline-scan-results-to-sarif@master
         with:
-          results-json: ${{ strategy.job-index }}-filtered_results.json
+          # results-json: ${{ strategy.job-index }}-filtered_results.json
+          pipeline-results-json: ${{ strategy.job-index }}-filtered_results.json
           output-results-sarif: veracode-results.sarif
           finding-rule-level: "4:3:0"
           ref: ${{ github.ref }}
