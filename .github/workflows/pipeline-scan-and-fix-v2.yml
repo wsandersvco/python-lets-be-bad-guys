@@ -104,7 +104,7 @@ jobs:
           inputFile: ${{ strategy.job-index }}-filtered_results.json
           vid: ${{ secrets.VERACODE_API_ID }}
           vkey: ${{ secrets.VERACODE_API_KEY }}
-          source_base_path_1: "./:source-code"
+          source_base_path_1: "source-code/:"
           language: python
           prComment: true
           fixType: batch
