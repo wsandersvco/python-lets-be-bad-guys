@@ -68,6 +68,7 @@ jobs:
         continue-on-error: true
 
   results_to_sarif:
+    if: ${{ needs.get-policy-flaws.result == 'success' && always() }} 
     needs: get-policy-flaws
     runs-on: ubuntu-latest
     name: Import policy results to SARIF
