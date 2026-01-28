@@ -105,7 +105,7 @@ jobs:
       #     repo_name: ${{ github.event.repository.name }}
       #     commitHash: ${{ github.sha }}
 
-  veracode_fix:
-    name: Fix
-    runs-on: ubuntu-latest
+  # veracode_fix:
+  #   name: Fix
+  #   runs-on: ubuntu-latest
     
