@@ -18,7 +18,7 @@ jobs:
       - name: Install pipenv & generate pipenv Pipfile
         shell: bash
         run: |
-          python3 -m venv .venv && .venv/bin/pip install pipenv && .venv/bin/pipenv install -r requirements.txt
+          python3 -m pip install pipenv && pipenv install -r requirements.txt
       
       - name: Veracode SCA Agent Scan
         id: veracode-sca
