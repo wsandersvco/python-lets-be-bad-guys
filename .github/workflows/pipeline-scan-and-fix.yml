@@ -79,9 +79,9 @@ jobs:
             --json_output_file ${{ strategy.job-index }}-results.json \
             --filtered_json_output_file ${{ strategy.job-index }}-filtered_results.json \
             --policy_name 'Veracode Recommended Very High'
-        continue-on-error: true
 
       - name: Upload Artifact
+        if: always()
         uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.file }}
@@ -108,6 +108,7 @@ jobs:
       #     commitHash: ${{ github.sha }}
 
       - name: Create fixes from static findings
+        if: always()
         uses: veracode/veracode-fix@v1.0.4
         with:
           access_token: ${{ github.token }}
