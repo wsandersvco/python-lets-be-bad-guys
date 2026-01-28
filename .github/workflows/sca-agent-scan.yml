@@ -32,4 +32,4 @@ jobs:
         env:
           SCAN_URL: ${{ steps.veracode-sca.outputs.scan-url }}
         run: |
-          echo "View detailed report at: $SCAN_URL"
+          echo "View detailed report at: ${{ env.SCAN_URL }}"
