@@ -17,13 +17,13 @@ jobs:
           echo GUID: ${guid}
           total_flaws=$(http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=STATIC&violates_policy=True" | jq -r '.page.total_elements')
           echo TOTAL_FLAWS: ${total_flaws}
-          http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=STATIC&violates_policy=True&size=${total_flaws}" > policy_flaws.json
+          http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=STATIC&violates_policy=True&size=${total_flaws}" > results.json
 
       - name: Save results
         uses: actions/upload-artifact@v6
         with:
           name: policy-flaws
-          path: /tmp/policy_flaws.json
+          path: /tmp/results.json
         continue-on-error: true
 
   results_to_sarif:
@@ -42,7 +42,7 @@ jobs:
         # create code scanning alerts
         uses: veracode/veracode-pipeline-scan-results-to-sarif@master
         with:
-          results-json: policy_flaws.json
+          results-json: results.json
           output-results-sarif: veracode-results.sarif
           ref: ${{ github.ref }}
           commitSHA: ${{ github.sha }}
