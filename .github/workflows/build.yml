@@ -1,0 +1,58 @@
+name: Veracode Package & Build
+on:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      name:
+        default: veracode-artifact
+        required: true
+        type: string
+      path:
+        default: ./veracode_artifact_directory
+        required: true
+        type: string
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out main branch
+        uses: actions/checkout@v6
+        with:
+          path: veracode-helper
+
+      - name: Check out main branch
+        uses: actions/checkout@v6
+        with:
+          path: source-code
+
+      - name: Install pipenv & generate pipenv Pipfile
+        shell: bash
+        run: |
+          python3 -m venv source-code/.venv && source-code/.venv/bin/pip install pipenv && source-code/.venv/bin/pipenv install -r source-code/requirements.txt
+
+      - name: Package the application
+        id: application_package_linux
+        shell: bash
+        run: |
+          working_path=$(pwd)
+          echo "working_dir=$working_path" >> "$GITHUB_OUTPUT"
+
+          cd veracode-helper/helper/cli
+          cliFile=$(ls -1 *.tar.gz | head -n 1)
+          cliFileName=$(echo "$cliFile" | cut -c 1-$((${#cliFile}-7)))
+          tar -zxvf $cliFile
+          cd $cliFileName
+          export PATH="veracode-helper/helper/cli/$cliFileName:$PATH"
+          cd $working_path
+
+          veracode package --source source-code --output "${{ inputs.path || './veracode_artifact_directory' }}" --trust --verbose
+    
+      - name: Upload artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ inputs.name || 'veracode-artifact' }}
+          path: ${{ inputs.path || './veracode_artifact_directory' }}
+          retention-days: 3
