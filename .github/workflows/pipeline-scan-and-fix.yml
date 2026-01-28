@@ -74,10 +74,10 @@ jobs:
             --file "./veracode_artifact_directory/${{ matrix.file }}"
             --emit_stack_dump true
             --summary_output true
-            --summary_output_file ${{ strategy.job-index }}-results.txt
+            --summary_output_file "${{ strategy.job-index }}-results.txt"
             --json_output true
-            --json_output_file ${{ strategy.job-index }}-results.json
-            --filtered_json_output_file ${{ strategy.job-index }}-filtered_results.json
+            --json_output_file "${{ strategy.job-index }}-results.json"
+            --filtered_json_output_file "${{ strategy.job-index }}-filtered_results.json"
             --policy_name 'Veracode Recommended Very High'
 
       - name: Upload Artifact
