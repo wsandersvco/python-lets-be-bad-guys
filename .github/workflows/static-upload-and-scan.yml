@@ -51,7 +51,6 @@ jobs:
     steps:
       - name: Fetch flaws
         run: |
-          cd /tmp
           export VERACODE_API_KEY_ID=${{ secrets.VERACODE_API_ID }}
           export VERACODE_API_KEY_SECRET=${{ secrets.VERACODE_API_KEY }}
           guid=$(http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v1/applications?name=GitHub Actions - python-lets-be-bad-guys" | jq -r '._embedded.applications[0].guid') 
@@ -64,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: policy-flaws
-          path: /tmp/policy_flaws.json
+          path: ./policy_flaws.json
 
   results_to_sarif:
     if: always()
