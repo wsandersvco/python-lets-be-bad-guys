@@ -36,6 +36,7 @@ jobs:
         uses: actions/download-artifact@v6
         with:
           name: policy-flaws
+          path: /tmp/policy_flaws.json
 
       - name: Convert pipeline scan output to SARIF format
         if: always()
