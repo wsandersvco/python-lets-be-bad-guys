@@ -10,19 +10,20 @@ jobs:
     steps:
       - name: Fetch flaws
         run: |
+          cd /home/luser
           export VERACODE_API_KEY_ID=${{ secrets.VERACODE_API_ID }}
           export VERACODE_API_KEY_SECRET=${{ secrets.VERACODE_API_KEY }}
           guid=$(http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v1/applications?name=GitHub Actions - python-lets-be-bad-guys" | jq -r '._embedded.applications[0].guid') 
           echo GUID: ${guid}
           total_flaws=$(http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=STATIC&violates_policy=True" | jq -r '.page.total_elements')
           echo TOTAL_FLAWS: ${total_flaws}
-          http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=STATIC&violates_policy=True&size=${total_flaws}" > policy_flaws.json
+          http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=STATIC&violates_policy=True&size=${total_flaws}" > /home/luser/policy_flaws.json
 
       - name: Save results
         uses: actions/upload-artifact@v6
         with:
           name: policy-flaws
-          path: ./policy_flaws.json
+          path: /home/luser/policy_flaws.json
 
   results_to_sarif:
     needs: get-policy-flaws
@@ -40,7 +41,7 @@ jobs:
         # create code scanning alerts
         uses: veracode/veracode-pipeline-scan-results-to-sarif@master
         with:
-          pipeline-results-json: /tmp/policy_flaws.json
+          pipeline-results-json: /home/luser/policy_flaws.json
           output-results-sarif: veracode-results.sarif
           ref: ${{ github.ref }}
           commitSHA: ${{ github.sha }}
