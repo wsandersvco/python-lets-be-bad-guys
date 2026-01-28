@@ -74,16 +74,14 @@ jobs:
 
     steps:
       - name: Get scan results
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v3
         with:
           name: policy-flaws
 
       - name: Convert pipeline scan output to SARIF format
         if: always()
         # create code scanning alerts
-        uses: veracode/veracode-pipeline-scan-results-to-sarif@master
+        uses: veracode/veracode-pipeline-scan-results-to-sarif@v1.0.7
         with:
-          results-json: results.json
+          pipeline-results-json: results.json
           output-results-sarif: veracode-results.sarif
-          ref: ${{ github.ref }}
-          commitSHA: ${{ github.sha }}

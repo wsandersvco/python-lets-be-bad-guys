@@ -20,7 +20,7 @@ jobs:
           http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=STATIC&violates_policy=True&size=${total_flaws}" > results.json
 
       - name: Save results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v3
         with:
           name: policy-flaws
           path: /tmp/results.json
@@ -33,16 +33,14 @@ jobs:
 
     steps:
       - name: Get scan results
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v3
         with:
           name: policy-flaws
 
       - name: Convert pipeline scan output to SARIF format
         if: always()
         # create code scanning alerts
-        uses: veracode/veracode-pipeline-scan-results-to-sarif@master
+        uses: veracode/veracode-pipeline-scan-results-to-sarif@v1.0.7
         with:
-          results-json: results.json
+          pipeline-results-json: results.json
           output-results-sarif: veracode-results.sarif
-          ref: ${{ github.ref }}
-          commitSHA: ${{ github.sha }}
