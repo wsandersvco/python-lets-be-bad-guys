@@ -39,8 +39,6 @@ jobs:
           name: policy-flaws
           path: /tmp
 
-      - run: ls -alR /tmp
-
       - name: Convert pipeline scan output to SARIF format
         if: always()
         # create code scanning alerts
