@@ -39,7 +39,7 @@ jobs:
           # exclude: '*.js'
           # include: '*.war'
           criticality: "VeryHigh"
-          # policy: ''
+          policy: 'Veracode Recommended Very High + SCA'
 
   get-policy-flaws:
     needs: policy_scan
