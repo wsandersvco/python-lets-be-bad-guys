@@ -71,13 +71,13 @@ jobs:
         run: | 
           java -Dpipeline.debug=true -jar pipeline-scan.jar \
             --veracode_api_id "${{secrets.VERACODE_API_ID}}" --veracode_api_key "${{secrets.VERACODE_API_KEY}}" \
-            --file "./veracode_artifact_directory/${{ matrix.file }}"
-            --emit_stack_dump true
-            --summary_output true
-            --summary_output_file "${{ strategy.job-index }}-results.txt"
-            --json_output true
-            --json_output_file "${{ strategy.job-index }}-results.json"
-            --filtered_json_output_file "${{ strategy.job-index }}-filtered_results.json"
+            --file "./veracode_artifact_directory/${{ matrix.file }}" \
+            --emit_stack_dump true \
+            --summary_output true \
+            --summary_output_file ${{ strategy.job-index }}-results.txt \
+            --json_output true \
+            --json_output_file ${{ strategy.job-index }}-results.json \
+            --filtered_json_output_file ${{ strategy.job-index }}-filtered_results.json \
             --policy_name 'Veracode Recommended Very High'
 
       - name: Upload Artifact
