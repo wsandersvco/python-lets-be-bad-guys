@@ -83,7 +83,7 @@ jobs:
         # create code scanning alerts
         uses: veracode/veracode-pipeline-scan-results-to-sarif@master
         with:
-          pipeline-results-json: policy_flaws.json
+          results-json: policy_flaws.json
           output-results-sarif: veracode-results.sarif
           ref: ${{ github.ref }}
           commitSHA: ${{ github.sha }}
