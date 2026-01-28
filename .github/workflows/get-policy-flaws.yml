@@ -23,7 +23,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: policy-flaws
-          path: /tmp/policy-flaws.json
+          path: /tmp/policy_flaws.json
 
   results_to_sarif:
     needs: get-policy-flaws
