@@ -1,4 +1,4 @@
-name: Veracode Static Analysis - Pipeline Scan And Fix
+name: Veracode Static Analysis - Scan And Fix
 on: workflow_dispatch
 
 jobs:
