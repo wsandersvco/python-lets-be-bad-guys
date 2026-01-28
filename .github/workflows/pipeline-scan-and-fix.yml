@@ -78,7 +78,6 @@ jobs:
             --json_output true \
             --json_output_file ${{ strategy.job-index }}-results.json \
             --filtered_json_output_file ${{ strategy.job-index }}-filtered_results.json \
-            --
             --policy_name 'Veracode Recommended Very High'
 
       - name: Upload Artifact
