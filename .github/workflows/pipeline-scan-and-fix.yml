@@ -78,6 +78,7 @@ jobs:
             --json_output true \
             --json_output_file ${{ strategy.job-index }}-results.json \
             --filtered_json_output_file ${{ strategy.job-index }}-filtered_results.json \
+            --
             --policy_name 'Veracode Recommended Very High'
 
       - name: Upload Artifact
@@ -115,6 +116,7 @@ jobs:
           inputFile: ${{ strategy.job-index }}-filtered_results.json
           vid: ${{ secrets.VERACODE_API_ID }}
           vkey: ${{ secrets.VERACODE_API_KEY }}
+          source_base_path_1: "source-code/:"
           language: python
           prComment: true
           fixType: batch
