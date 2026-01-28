@@ -18,7 +18,7 @@ jobs:
           echo GUID: ${guid}
           total_flaws=$(http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=STATIC&violates_policy=True" | jq -r '.page.total_elements')
           echo TOTAL_FLAWS: ${total_flaws}
-          http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=STATIC&violates_policy=True&size=${total_flaws}" | jq -r '._embedded' > policy_flaws.json
+          http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=STATIC&violates_policy=True&size=${total_flaws}" > policy_flaws.json
 
       - name: Save results
         uses: actions/upload-artifact@v4
@@ -38,6 +38,8 @@ jobs:
         with:
           name: policy-flaws
           path: /tmp
+
+      - run: ls -alR /tmp
 
       - name: Convert pipeline scan output to SARIF format
         if: always()
