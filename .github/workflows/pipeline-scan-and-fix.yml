@@ -1,4 +1,4 @@
-name: Veracode Static Analysis - Scan And Fix
+name: Veracode Static Analysis - Pipeline Scan And Fix
 on: workflow_dispatch
 
 jobs:
@@ -65,7 +65,8 @@ jobs:
           curl -fsSL -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
 
       - name: Unzip the Pipeline Scanner
-        run: unzip pipeline-scan-LATEST.zip
+        run: unzip -o pipeline-scan-LATEST.zip
+
       - name: Run Pipeline Scanner
         run: | 
           java -Dpipeline.debug=true -jar pipeline-scan.jar \
