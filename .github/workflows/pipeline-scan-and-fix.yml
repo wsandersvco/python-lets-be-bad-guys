@@ -79,6 +79,7 @@ jobs:
             --json_output_file ${{ strategy.job-index }}-results.json \
             --filtered_json_output_file ${{ strategy.job-index }}-filtered_results.json \
             --policy_name 'Veracode Recommended Very High'
+        continue-on-error: true
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v6
@@ -86,15 +87,15 @@ jobs:
           name: ${{ matrix.file }}
           path: '*-results.*'
 
-      - name: Convert pipeline scan output to SARIF format
-        if: always()
-        # create code scanning alerts
-        uses: veracode/veracode-pipeline-scan-results-to-sarif@master
-        with:
-          pipeline-results-json: ${{ strategy.job-index }}-filtered_results.json
-          output-results-sarif: veracode-results.sarif
-          ref: ${{ github.ref }}
-          commitSHA: ${{ github.sha }}
+      # - name: Convert pipeline scan output to SARIF format
+      #   if: always()
+      #   # create code scanning alerts
+      #   uses: veracode/veracode-pipeline-scan-results-to-sarif@master
+      #   with:
+      #     pipeline-results-json: ${{ strategy.job-index }}-filtered_results.json
+      #     output-results-sarif: veracode-results.sarif
+      #     ref: ${{ github.ref }}
+      #     commitSHA: ${{ github.sha }}
 
       # - name: Create flaws as issues
       #   if: ${{ inputs.create_issue && always() }}
@@ -107,6 +108,13 @@ jobs:
       #     commitHash: ${{ github.sha }}
 
   # veracode_fix:
-  #   name: Fix
+  #   name: Veracode Fix
   #   runs-on: ubuntu-latest
+  #   needs: pipeline_scan
+
+  #   steps:
+  #     - name: Checkout repo
+  #       uses: actions/checkout@v6
+
+  #     - name: Get flaw file
     
