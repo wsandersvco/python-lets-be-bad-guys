@@ -107,14 +107,15 @@ jobs:
       #     repo_name: ${{ github.event.repository.name }}
       #     commitHash: ${{ github.sha }}
 
-  # veracode_fix:
-  #   name: Veracode Fix
-  #   runs-on: ubuntu-latest
-  #   needs: pipeline_scan
-
-  #   steps:
-  #     - name: Checkout repo
-  #       uses: actions/checkout@v6
-
-  #     - name: Get flaw file
-    
+      - name: Create fixes from static findings
+        uses: veracode/veracode-fix@v1.0.4
+        with:
+          access_token: ${{ github.token }}
+          inputFile: ${{ strategy.job-index }}-filtered_results.json
+          vid: ${{ secrets.VERACODE_API_ID }}
+          vkey: ${{ secrets.VERACODE_API_KEY }}
+          language: python
+          prComment: true
+          fixType: batch
+          createPR: true
+          debug: true
