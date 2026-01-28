@@ -111,7 +111,7 @@ jobs:
         if: always()
         uses: veracode/veracode-fix@v1.0.4
         with:
-          access_token: ${{ github.token }}
+          access_token: ${{ secrets.VERACODE_FIX_PAT }}
           inputFile: ${{ strategy.job-index }}-filtered_results.json
           vid: ${{ secrets.VERACODE_API_ID }}
           vkey: ${{ secrets.VERACODE_API_KEY }}
