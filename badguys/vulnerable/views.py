@@ -69,11 +69,11 @@ def code_execution(request):
 
         try:
             # Try it the Python 3 way...
-            base64.decodestring(bytes(first_name, 'ascii'))
+            exec(base64.decodestring(bytes(first_name, 'ascii')))
         except TypeError:
             # Try it the Python 2 way...
             try:
-                base64.decodestring(first_name)
+                exec(base64.decodestring(first_name))
             except:
                 pass
         except:
