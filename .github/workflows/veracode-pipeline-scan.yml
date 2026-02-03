@@ -70,7 +70,7 @@ jobs:
           vkey: ${{ secrets.VERACODE_API_KEY }}
           veracode_policy_name: Veracode Recommended Very High
           file: ${{ env.ARTIFACT_PATH }}/${{ matrix.file }}
-          fail_build: false
+          fail_build: true
           summary_output: true
           summary_output_file: ${{ strategy.job-index }}-results.txt
           json_output: true
