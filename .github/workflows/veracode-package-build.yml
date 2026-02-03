@@ -5,10 +5,18 @@ name: Veracode Package & Build
 
 on:
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      artifact_name:
+        required: false
+        type: string
+      artifact_path:
+        required: false
+        type: string
 
 env:
-  ARTIFACT_NAME: veracode-artifact
-  ARTIFACT_PATH: veracode_artifact_path
+  ARTIFACT_NAME: ${{ inputs.artifact_name || 'veracode-artifact' }}
+  ARTIFACT_PATH: ${{ inputs.artifact_path || 'veracode_artifact_path' }}
 
 jobs:
   build:
