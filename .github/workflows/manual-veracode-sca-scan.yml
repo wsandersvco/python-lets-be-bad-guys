@@ -1,13 +1,13 @@
-name: Veracode Static Analysis - SCA Agent Scan
+name: Veracode Software Composition Analysis
+
 on: workflow_dispatch
 
 jobs:
-  sca_agent_scan:
-    name: SCA Agent Scan
+  veracode_sca_task:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: Check out main branch
+      - name: Checkout code
         uses: actions/checkout@v6
 
       - name: Set up Python
@@ -26,4 +26,8 @@ jobs:
           SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
         uses: veracode/veracode-sca@v2.1.15
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          create-issues: false
           debug: true
+          allow-dirty: true
+          recursive: true
