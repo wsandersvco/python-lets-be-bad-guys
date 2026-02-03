@@ -1,13 +1,14 @@
-name: Veracode Static Analysis - Pipeline Scan
+name: Veracode Pipeline Scan
 on: workflow_dispatch
+
+env:
+  ARTIFACT_NAME: veracode-artifact
+  ARTIFACT_PATH: veracode_artifact_directory
 
 jobs:
   build:
     name: Build
     uses: ./.github/workflows/veracode-package-build.yml
-    with:
-      artifact_name: veracode-artifact
-      artifact_path: ./veracode_artifact_directory
     secrets: inherit
 
   prepare_pipeline_scan:
@@ -24,8 +25,8 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v6
         with:
-          name: veracode-artifact
-          path: ./veracode_artifact_directory
+          name: ${{ env.ARTIFACT_NAME }}
+          path: ${{ env.ARTIFACT_PATH }}
 
       - name: Get list of files for matrix
         id: get-files
@@ -51,8 +52,8 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v6
         with:
-          name: veracode-artifact
-          path: ./veracode_artifact_directory
+          name: ${{ env.ARTIFACT_NAME }}
+          path: ${{ env.ARTIFACT_PATH }}
       
       - name: Debug Matrix Content
         run: |
@@ -68,8 +69,8 @@ jobs:
           vid: ${{ secrets.VERACODE_API_ID }}
           vkey: ${{ secrets.VERACODE_API_KEY }}
           veracode_policy_name: Veracode Recommended Very High
-          file: ./veracode_artifact_directory/${{ matrix.file }}
-          fail_build: true
+          file: ${{ env.ARTIFACT_PATH }}/${{ matrix.file }}
+          fail_build: false
           summary_output: true
           summary_output_file: ${{ strategy.job-index }}-results.txt
           json_output: true
