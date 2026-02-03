@@ -1,16 +1,14 @@
 name: Veracode Package & Build
+
+# artifact_name: veracode-artifact
+# artifact_path: veracode_artifact_path
+
 on:
   workflow_dispatch:
-  workflow_call:
-    inputs:
-      name:
-        default: veracode-artifact
-        required: true
-        type: string
-      path:
-        default: ./veracode_artifact_directory
-        required: true
-        type: string
+
+env:
+  ARTIFACT_NAME: veracode-artifact
+  ARTIFACT_PATH: veracode_artifact_path
 
 jobs:
   build:
@@ -21,6 +19,7 @@ jobs:
       - name: Check out main branch
         uses: actions/checkout@v6
         with:
+          repository: wsandersvc/veracode-cli
           path: veracode-helper
 
       - name: Check out main branch
@@ -28,14 +27,21 @@ jobs:
         with:
           path: source-code
 
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11.x'
+      
       - name: Install pipenv & generate pipenv Pipfile
         shell: bash
+        working-directory: source-code
         run: |
-          python3 -m venv source-code/.venv && source-code/.venv/bin/pip install pipenv && source-code/.venv/bin/pipenv install -r source-code/requirements.txt
+          python3 -m pip install pipenv && pipenv install -r requirements.txt
 
       - name: Package the application
         id: application_package_linux
         shell: bash
+        working-directory: source-code
         run: |
           working_path=$(pwd)
           echo "working_dir=$working_path" >> "$GITHUB_OUTPUT"
@@ -48,11 +54,11 @@ jobs:
           export PATH="veracode-helper/helper/cli/$cliFileName:$PATH"
           cd $working_path
 
-          veracode package --source source-code --output "${{ inputs.path || './veracode_artifact_directory' }}" --trust --verbose
-    
+          veracode package --source . --output "${{ github.workspace }}/${{ env.ARTIFACT_PATH }}" --trust --verbose
+
       - name: Upload artifact
         uses: actions/upload-artifact@v6
         with:
-          name: ${{ inputs.name || 'veracode-artifact' }}
-          path: ${{ inputs.path || './veracode_artifact_directory' }}
+          name: ${{ env.ARTIFACT_NAME }}
+          path: ${{ github.workspace}}/${{ env.ARTIFACT_PATH }}
           retention-days: 3
