@@ -1,8 +1,18 @@
-name: Veracode Static Analysis - Get Policy Flaws
-on: workflow_dispatch
+name: Veracode Static Analysis - Get Policy Flaws And Import SARIF
+
+on:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      application_name:
+        type: string
+        required: true
+
+env:
+  APPLICATION_NAME: ${{ inputs.application_name || 'GitHub Actions - python-lets-be-bad-guys' }}
 
 jobs:
-  get-policy-flaws:
+  fetch_policy_flaws_task:
     if: always()
     runs-on: ubuntu-latest
     name: Veracode Static Analysis - Get Policy Flaws
@@ -14,7 +24,7 @@ jobs:
           cd /tmp
           export VERACODE_API_KEY_ID=${{ secrets.VERACODE_API_ID }}
           export VERACODE_API_KEY_SECRET=${{ secrets.VERACODE_API_KEY }}
-          guid=$(http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v1/applications?name=GitHub Actions - python-lets-be-bad-guys" | jq -r '._embedded.applications[0].guid') 
+          guid=$(http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v1/applications?name=${{ env.APPLICATION_NAME }}" | jq -r '._embedded.applications[0].guid') 
           echo GUID: ${guid}
           total_flaws=$(http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=STATIC&violates_policy=True" | jq -r '.page.total_elements')
           echo TOTAL_FLAWS: ${total_flaws}
@@ -28,7 +38,7 @@ jobs:
         continue-on-error: true
 
   results_to_sarif:
-    needs: get-policy-flaws
+    needs: fetch_policy_flaws_task
     runs-on: ubuntu-latest
     name: Import policy results to SARIF
 
