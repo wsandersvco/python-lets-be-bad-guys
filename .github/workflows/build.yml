@@ -22,6 +22,9 @@ jobs:
           repository: wsandersvc/veracode-cli
           path: veracode-helper
 
+      - run: ls -alR
+        working-directory: veracode-helper
+
       - name: Check out main branch
         uses: actions/checkout@v6
         with:
