@@ -1,4 +1,4 @@
-name: Veracode Static Analysis - Pipeline Scan And Batch Fix
+name: Veracode Static Analysis - Pipeline Scan And Single Fix
 on: workflow_dispatch
 
 env:
@@ -64,8 +64,9 @@ jobs:
       - name: Veracode Pipeline-Scan
         if: always()
         id: pipeline-scan
-        uses: veracode/Veracode-pipeline-scan-action@v1.0.20
+        uses: veracode/Veracode-pipeline-scan-action@v1.0.21
         with:
+          esd: true
           vid: ${{ secrets.VERACODE_API_ID }}
           vkey: ${{ secrets.VERACODE_API_KEY }}
           veracode_policy_name: Veracode Recommended Very High
@@ -90,6 +91,7 @@ jobs:
           source_base_path_1: "source-code/:"
           language: python
           prComment: true
-          fixType: batch
-          createPR: true
+          files: yes
+          fixType: single
+          createPR: false
           debug: true
