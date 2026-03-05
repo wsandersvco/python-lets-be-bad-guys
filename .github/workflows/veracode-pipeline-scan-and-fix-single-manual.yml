@@ -1,5 +1,7 @@
 name: Veracode Static Analysis - Pipeline Scan And Single Fix
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+  pull_request:
 
 env:
   ARTIFACT_NAME: veracode-artifact
