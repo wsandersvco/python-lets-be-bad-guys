@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
+from html import escape
 
 
 ## 01 - Injection Attacks
@@ -50,7 +51,7 @@ def user_pic(request):
         return render(request, 'vulnerable/injection/file_access.html',
                 {'msg': msg})
 
-    return HttpResponse(data, content_type=mimetypes.guess_type(filename)[0])
+    return HttpResponse(escape(data), content_type=mimetypes.guess_type(filename)[0])
 
 
 def code_execution(request):
